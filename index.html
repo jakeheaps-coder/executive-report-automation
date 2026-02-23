@@ -194,7 +194,7 @@ img{max-width:100%;height:auto;display:block;}
   <div class="hero-in" style="animation:fadeUp 1s var(--ease-out) .2s both;">
     <div class="hero-badge"><span class="hero-dot"></span> Runs Every Friday at 9am MST</div>
     <h1>Weekly Executive Report Automation</h1>
-    <p>An AI-powered pipeline that collects data from 3 sources, generates a rubric-graded executive report with Gemini, and delivers branded Word + PowerPoint documents to leadership every week.</p>
+    <p>An AI-powered pipeline that collects data from 3 sources, generates a rubric-graded executive report with Gemini, and delivers a branded talk track and slide deck for CMO review every week.</p>
     <a href="#pipeline" class="hero-cta">
       See How It Works
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -337,8 +337,8 @@ img{max-width:100%;height:auto;display:block;}
 <div class="sec">
   <div class="sec-hd anim">
     <span class="sec-num">05 &mdash; Deliverables</span>
-    <h2>Three Outputs, Auto-Delivered</h2>
-    <p>The pipeline produces a Word document, a branded PowerPoint slide, and sends email notifications with links.</p>
+    <h2>Two Deliverables, Review-Ready</h2>
+    <p>The pipeline produces two documents &mdash; a talk track and a branded slide &mdash; uploaded to SharePoint for review before going to the CMO.</p>
   </div>
   <div class="img-section anim">
     <img src="images/deliverables.png" alt="Word document, PowerPoint slide, and email deliverables" loading="lazy">
@@ -348,22 +348,22 @@ img{max-width:100%;height:auto;display:block;}
       <div class="output-icon" style="background:rgba(153,204,238,.12);color:var(--blue-deep);">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       </div>
-      <h3>Word Document (.docx)</h3>
-      <p>Full executive report with headings, bullets, and formatted sections. Uploaded to SharePoint Executive Staff Prep folder.</p>
+      <h3>Talk Track (.docx)</h3>
+      <p>Full executive report with headings, bullets, and formatted sections. Uploaded to SharePoint for review before the CMO meeting.</p>
     </div>
     <div class="output-card">
       <div class="output-icon" style="background:rgba(255,153,34,.1);color:var(--orange);">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
       </div>
-      <h3>PowerPoint Slide (.pptx)</h3>
-      <p>Branded single-slide deck with pipeline drivers, key initiatives, and decisions/asks. Domo blue styling with logo.</p>
+      <h3>Pipeline Slide (.pptx)</h3>
+      <p>Branded single-slide deck with pipeline drivers, key initiatives, and decisions/asks. Ready for the CMO's executive staff meeting.</p>
     </div>
     <div class="output-card">
       <div class="output-icon" style="background:rgba(173,212,193,.15);color:#4a9e6e;">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       </div>
-      <h3>Email Notification</h3>
-      <p>Sent via Domo Code Engine with direct SharePoint links to both documents. Recipients: leadership team.</p>
+      <h3>Review Notification</h3>
+      <p>Email sent to Lacy Zimmerman via Domo Code Engine with SharePoint links to both documents for review before sending to the CMO.</p>
     </div>
   </div>
 </div>
@@ -472,7 +472,7 @@ img{max-width:100%;height:auto;display:block;}
           <li>11-section system prompt with current-week-only rule enforcement</li>
           <li>5-round rubric-graded refinement loop with specific fix feedback</li>
           <li>Word document and branded PowerPoint slide generation</li>
-          <li>Email delivery via Domo Code Engine with SharePoint links</li>
+          <li>Review notification to Lacy Zimmerman via Domo Code Engine</li>
           <li>Weekly archive system with 4-week trend context</li>
           <li>Cloud Run Jobs with Cloud Scheduler (Fridays 9am MST)</li>
           <li>Exponential backoff retries, structured logging, custom exceptions</li>
@@ -516,7 +516,7 @@ img{max-width:100%;height:auto;display:block;}
     {num:4,title:"Generate Report",desc:"Gemini creates executive report",color:"var(--orange)"},
     {num:5,title:"Grade Quality",desc:"Rubric scoring + refinement",color:"var(--purple)"},
     {num:6,title:"Create Docs",desc:"Word + PowerPoint output",color:"var(--blue)"},
-    {num:7,title:"Deliver",desc:"Email + SharePoint + archive",color:"var(--mint)"}
+    {num:7,title:"Deliver",desc:"Notify reviewer + archive",color:"var(--mint)"}
   ];
   var stepsEl=document.getElementById("stepsGrid");
   steps.forEach(function(s){
@@ -594,7 +594,7 @@ img{max-width:100%;height:auto;display:block;}
   // STATS
   var stats=[
     {value:7,label:"Pipeline Steps"},{value:3,label:"Data Sources"},{value:5,label:"Refinement Rounds"},{value:5,label:"Grading Criteria"},
-    {value:38,label:"Dashboard Cards"},{value:11,label:"Prompt Sections"},{value:3,label:"Output Documents"},{value:4,label:"Weekly Archives"}
+    {value:38,label:"Dashboard Cards"},{value:11,label:"Prompt Sections"},{value:2,label:"Deliverables"},{value:4,label:"Weekly Archives"}
   ];
   var sEl=document.getElementById("statsGrid");
   stats.forEach(function(s){
