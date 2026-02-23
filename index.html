@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Executive Report Automation — Domo Marketing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #99CCEE; --blue-dark: #7BB8E0; --blue-deep: #5A9FCC;
+  --orange: #FF9922; --orange-h: #E8891F;
+  --purple: #776CB0; --pink: #C179BD; --mint: #ADD4C1;
+  --n50: #F1F6FA; --n100: #DCE4EA; --n200: #B7C1CB; --n600: #68737F; --n900: #3F454D;
+  --font: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --sh-sm: 0 1px 3px rgba(63,69,77,.08), 0 1px 2px rgba(63,69,77,.06);
+  --sh-md: 0 4px 12px rgba(63,69,77,.1), 0 2px 4px rgba(63,69,77,.06);
+  --sh-lg: 0 8px 24px rgba(63,69,77,.1), 0 4px 8px rgba(63,69,77,.05);
+  --r-sm: 6px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+  --ease: cubic-bezier(.83,0,.17,1); --ease-out: cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;scroll-padding-top:72px;}
+body{font-family:var(--font);color:var(--n900);background:#fff;-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden;}
+h1{font-size:clamp(2rem,5vw,3.25rem);font-weight:800;line-height:1.12;letter-spacing:-.02em;}
+h2{font-size:clamp(1.5rem,3.5vw,2.25rem);font-weight:700;line-height:1.2;letter-spacing:-.01em;}
+h3{font-size:clamp(1.1rem,2vw,1.35rem);font-weight:700;line-height:1.3;}
+h4{font-size:1rem;font-weight:600;line-height:1.4;}
+p{font-weight:400;line-height:1.7;color:var(--n600);}
+a{color:var(--blue-deep);text-decoration:none;}
+code{font-size:.8rem;background:var(--n50);padding:.1rem .4rem;border-radius:4px;font-family:'SF Mono',Monaco,monospace;}
+img{max-width:100%;height:auto;display:block;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(2rem);}to{opacity:1;transform:translateY(0);}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.6;}50%{transform:scale(1.6);opacity:0;}}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+.anim{opacity:0;transform:translateY(2rem);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out);}
+.anim.vis{opacity:1;transform:translateY(0);}
+@media(prefers-reduced-motion:reduce){.anim{opacity:1;transform:none;}}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--n100);transition:box-shadow .3s var(--ease);}
+.nav.scrolled{box-shadow:var(--sh-md);}
+.nav-in{max-width:1200px;margin:0 auto;padding:0 1.5rem;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:.75rem;font-weight:700;font-size:.9375rem;color:var(--n900);}
+.nav-logo svg{flex-shrink:0;}
+.nav-sep{opacity:.35;font-weight:300;margin:0 .25rem;}
+.nav-links{display:flex;gap:.25rem;}
+.nav-links a{padding:.4rem .75rem;font-size:.8125rem;font-weight:600;color:var(--n600);border-radius:var(--r-sm);transition:all .25s var(--ease);}
+.nav-links a:hover{color:var(--n900);background:var(--n50);}
+.nav-links a.active{color:var(--blue-deep);background:rgba(153,204,238,.12);}
+.nav-mob{display:none;background:none;border:none;cursor:pointer;padding:.5rem;color:var(--n900);}
+@media(max-width:768px){
+  .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:#fff;border-bottom:1px solid var(--n100);flex-direction:column;padding:.75rem;box-shadow:var(--sh-lg);}
+  .nav-links.open{display:flex;}
+  .nav-mob{display:block;}
+}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;background:var(--blue);overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,transparent 0%,rgba(90,159,204,.25) 100%);pointer-events:none;}
+.hero-grid{position:absolute;inset:0;opacity:.05;background-image:linear-gradient(rgba(255,255,255,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.4) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hero-in{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:6rem 1.5rem 4rem;text-align:center;}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.35rem .9rem;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:100px;font-size:.7rem;font-weight:700;color:#fff;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.25rem;backdrop-filter:blur(4px);}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange);position:relative;}
+.hero-dot::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--orange);animation:pulse 2s ease-out infinite;}
+.hero h1{color:#fff;margin-bottom:1rem;font-size:clamp(2.25rem,5.5vw,3.5rem);max-width:800px;margin-left:auto;margin-right:auto;}
+.hero p{color:rgba(255,255,255,.75);font-size:clamp(1rem,1.8vw,1.15rem);font-weight:300;max-width:640px;margin:0 auto 2rem;line-height:1.65;}
+.hero-cta{display:inline-flex;align-items:center;gap:.5rem;padding:.875rem 2rem;background:var(--orange);color:#fff;font-weight:600;font-size:.9375rem;font-family:var(--font);border:none;border-radius:var(--r-md);cursor:pointer;transition:all .3s var(--ease);text-decoration:none;}
+.hero-cta:hover{background:var(--orange-h);transform:translateY(-2px);box-shadow:0 4px 20px rgba(255,153,34,.25);}
+.hero-img{max-width:900px;margin:3rem auto 0;border-radius:var(--r-xl);box-shadow:0 12px 40px rgba(63,69,77,.15);overflow:hidden;}
+
+/* SECTIONS */
+.sec{padding:5rem 1.5rem;max-width:1200px;margin:0 auto;}
+.sec-alt{background:var(--n50);}
+.sec-hd{text-align:center;margin-bottom:3.5rem;}
+.sec-num{display:inline-block;font-size:.6875rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--blue-deep);background:rgba(153,204,238,.15);padding:.3rem .75rem;border-radius:100px;margin-bottom:1rem;}
+.sec-hd h2{margin-bottom:.75rem;}
+.sec-hd p{max-width:640px;margin:0 auto;font-size:1.0625rem;}
+
+/* IMAGE SECTION */
+.img-section{border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-lg);border:1px solid var(--n100);margin-bottom:2rem;transition:transform .3s var(--ease);}
+.img-section:hover{transform:translateY(-2px);}
+
+/* STEPS */
+.steps{display:grid;grid-template-columns:repeat(7,1fr);gap:.75rem;}
+@media(max-width:992px){.steps{grid-template-columns:repeat(4,1fr);}}
+@media(max-width:600px){.steps{grid-template-columns:repeat(2,1fr);}}
+.step{text-align:center;padding:1.25rem .75rem;background:#fff;border:1px solid var(--n100);border-radius:var(--r-lg);transition:all .3s var(--ease);}
+.step:hover{box-shadow:var(--sh-md);transform:translateY(-2px);border-color:rgba(153,204,238,.3);}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;font-weight:800;font-size:.8125rem;color:#fff;margin-bottom:.5rem;}
+.step h4{font-size:.8125rem;margin-bottom:.15rem;}
+.step p{font-size:.7rem;}
+
+/* SOURCE CARDS */
+.sources{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+@media(max-width:768px){.sources{grid-template-columns:1fr;}}
+.source{background:#fff;border:1px solid var(--n100);border-radius:var(--r-xl);padding:2rem;transition:all .3s var(--ease);position:relative;overflow:hidden;}
+.source:hover{box-shadow:var(--sh-lg);transform:translateY(-3px);border-color:rgba(153,204,238,.3);}
+.source-icon{width:48px;height:48px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;}
+.source h3{margin-bottom:.5rem;}
+.source p{font-size:.9rem;margin-bottom:.75rem;}
+.source-tag{display:inline-block;padding:.2rem .6rem;border-radius:100px;font-size:.65rem;font-weight:700;letter-spacing:.03em;}
+.source-meta{list-style:none;margin-top:.75rem;}
+.source-meta li{font-size:.8rem;padding:.25rem 0;color:var(--n600);display:flex;align-items:center;gap:.35rem;}
+.source-meta li::before{content:'';width:4px;height:4px;border-radius:50%;flex-shrink:0;}
+
+/* GRADING */
+.grade-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;}
+@media(max-width:768px){.grade-grid{grid-template-columns:repeat(2,1fr);}}
+.grade-item{text-align:center;padding:1.5rem 1rem;background:#fff;border:1px solid var(--n100);border-radius:var(--r-lg);transition:all .3s var(--ease);}
+.grade-item:hover{box-shadow:var(--sh-md);transform:translateY(-2px);}
+.grade-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;}
+.grade-item h4{font-size:.8125rem;margin-bottom:.15rem;}
+.grade-item p{font-size:.7rem;}
+
+/* OUTPUT */
+.output-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+@media(max-width:768px){.output-grid{grid-template-columns:1fr;}}
+.output-card{background:#fff;border:1px solid var(--n100);border-radius:var(--r-xl);padding:2rem;text-align:center;transition:all .3s var(--ease);}
+.output-card:hover{box-shadow:var(--sh-lg);transform:translateY(-3px);border-color:rgba(153,204,238,.3);}
+.output-icon{width:56px;height:56px;border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
+.output-card h3{margin-bottom:.5rem;font-size:1rem;}
+.output-card p{font-size:.875rem;}
+
+/* REPORT STRUCTURE */
+.report-sections{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.75rem;}
+.report-sec{padding:1.25rem;background:#fff;border:1px solid var(--n100);border-radius:var(--r-lg);transition:all .3s var(--ease);border-left:3px solid transparent;}
+.report-sec:hover{box-shadow:var(--sh-sm);transform:translateY(-1px);}
+.report-sec h4{font-size:.875rem;margin-bottom:.25rem;}
+.report-sec p{font-size:.75rem;}
+
+/* INFRA */
+.infra-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+@media(max-width:768px){.infra-grid{grid-template-columns:1fr;}}
+.infra-card{background:#fff;border:1px solid var(--n100);border-radius:var(--r-lg);padding:1.5rem;transition:all .3s var(--ease);}
+.infra-card:hover{box-shadow:var(--sh-lg);transform:translateY(-2px);border-color:rgba(153,204,238,.3);}
+.infra-card h3{font-size:1rem;margin-bottom:.375rem;}
+.infra-card p{font-size:.875rem;}
+.infra-specs{list-style:none;margin-top:.75rem;}
+.infra-specs li{font-size:.8125rem;padding:.3rem 0;color:var(--n600);display:flex;align-items:center;gap:.375rem;}
+.infra-specs li::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--blue);flex-shrink:0;}
+
+/* STATS */
+.stats-sec{background:linear-gradient(180deg,var(--n900) 0%,#2D3239 100%);padding:5rem 1.5rem;}
+.stats-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
+@media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+.stat-card{text-align:center;padding:1.5rem 1rem;}
+.stat-val{font-size:2.75rem;font-weight:300;color:var(--blue);line-height:1.1;margin-bottom:.375rem;}
+.stat-lbl{font-size:.8125rem;font-weight:600;color:rgba(255,255,255,.4);letter-spacing:.03em;}
+
+/* FOOTER SECTIONS */
+.built-with{background:var(--n900);padding:3rem 1.5rem 0;}
+.built-inner{max-width:1200px;margin:0 auto;}
+.tech-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,.06);}
+.tech-badge{padding:.4rem .9rem;border-radius:100px;font-size:.75rem;font-weight:600;border:1px solid;}
+.version-sec{background:var(--n900);padding:2.5rem 1.5rem;}
+.version-inner{max-width:800px;margin:0 auto;}
+.version-line{border-left:2px solid rgba(153,204,238,.2);padding-left:1.5rem;margin-left:.5rem;}
+.version-dot{position:absolute;left:-1.85rem;top:.25rem;width:10px;height:10px;border-radius:50%;background:var(--blue);}
+.footer{background:#2D3239;border-top:1px solid rgba(255,255,255,.05);padding:2rem 1.5rem;text-align:center;}
+.footer p{font-size:.8125rem;color:rgba(255,255,255,.3);}
+.footer a{color:var(--blue);}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-in">
+    <a href="#hero" class="nav-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="32" height="32"><path fill="#99CCEE" d="M150.5,328.6c12.4,13.8,21.2,30.9,25,49.8,9.9-48.8,53-85.5,104.7-85.5s94.8,36.8,104.7,85.6v-85.6l106.8,106.8,107.1-106.8v85.6c9.9-48.8,53-85.6,104.7-85.6s79.2,24.8,96.4,60.7V0H0v292.9h70.8c31.7,0,60.1,13.8,79.7,35.7Z"/><path fill="#99CCEE" d="M703.6,506.6c-51.7,0-94.8-36.8-104.7-85.6v85.6h-36v-127.8l-71.1,71.4-71.4-71.4v127.8h-35.4v-85.6c-9.9,48.8-53,85.6-104.7,85.6s-94.8-36.7-104.7-85.5c-3.8,18.9-12.6,36-25,49.8-19.6,21.9-48,35.7-79.7,35.7H0v293.4h800v-354.2c-17.2,35.9-53.9,60.7-96.4,60.7h0Z"/><path fill="#99CCEE" d="M280.2,471c39.4,0,71.3-31.9,71.3-71.3s-31.9-71.3-71.3-71.3-71.3,31.9-71.3,71.3,31.9,71.3,71.3,71.3Z"/><path fill="#99CCEE" d="M142.1,399.7c0-37.8-29.4-68.7-66.6-71.1h-40.1v142.2h40.1c37.2-2.4,66.6-33.3,66.6-71.1h0Z"/><path fill="#99CCEE" d="M703.6,471c39.4,0,71.3-31.9,71.3-71.3s-31.9-71.3-71.3-71.3-71.3,31.9-71.3,71.3,31.9,71.3,71.3,71.3Z"/><path fill="#FFF" d="M150.5,470.8c12.4-13.8,21.2-30.9,25-49.8,9.9,48.8,53,85.5,104.7,85.5s94.8-36.8,104.7-85.6v85.6h35.4v-127.8l71.4,71.4,71.1-71.4v127.8h36v-85.6c9.9,48.8,53,85.6,104.7,85.6s79.2-24.8,96.4-60.7v-92.2c-17.2-35.9-53.9-60.7-96.4-60.7s-94.8,36.8-104.7,85.6v-85.6l-107.1,106.8-106.8-106.8v85.6c-9.9-48.8-53-85.6-104.7-85.6s-94.8,36.7-104.7,85.5c-3.8-18.9-12.6-36-25-49.8-19.6-21.9-48-35.7-79.7-35.7H0v213.7h70.8c31.7,0,60.1-13.8,79.7-35.7h0ZM703.6,328.5c39.4,0,71.3,31.9,71.3,71.3s-31.9,71.3-71.3,71.3-71.3-31.9-71.3-71.3,31.9-71.3,71.3-71.3ZM280.2,328.5c39.4,0,71.3,31.9,71.3,71.3s-31.9,71.3-71.3,71.3-71.3-31.9-71.3-71.3,31.9-71.3,71.3-71.3ZM35.4,328.6h40.1c37.2,2.4,66.6,33.3,66.6,71.1s-29.4,68.7-66.6,71.1h-40.1v-142.2h0Z"/></svg>
+      Executive Report Automation <span class="nav-sep">|</span> Architecture
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#pipeline">Pipeline</a>
+      <a href="#sources">Sources</a>
+      <a href="#generation">AI Generation</a>
+      <a href="#grading">Quality</a>
+      <a href="#output">Output</a>
+      <a href="#report">Report</a>
+      <a href="#infra">Infrastructure</a>
+    </div>
+    <button class="nav-mob" id="navToggle" aria-label="Toggle menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-in" style="animation:fadeUp 1s var(--ease-out) .2s both;">
+    <div class="hero-badge"><span class="hero-dot"></span> Runs Every Friday at 9am MST</div>
+    <h1>Weekly Executive Report Automation</h1>
+    <p>An AI-powered pipeline that collects data from 3 sources, generates a rubric-graded executive report with Gemini, and delivers branded Word + PowerPoint documents to leadership every week.</p>
+    <a href="#pipeline" class="hero-cta">
+      See How It Works
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+    <div class="hero-img">
+      <img src="images/pipeline-flow.png" alt="7-step pipeline flow diagram" loading="eager">
+    </div>
+  </div>
+</section>
+
+<!-- PIPELINE -->
+<div class="sec-alt" id="pipeline">
+<div class="sec">
+  <div class="sec-hd anim">
+    <span class="sec-num">01 &mdash; Pipeline</span>
+    <h2>7 Steps, Fully Automated</h2>
+    <p>Every Friday at 9am, Cloud Scheduler triggers a Cloud Run job that executes the full pipeline end-to-end.</p>
+  </div>
+  <div class="steps anim" id="stepsGrid"></div>
+</div>
+</div>
+
+<!-- DATA SOURCES -->
+<div id="sources">
+<div class="sec">
+  <div class="sec-hd anim">
+    <span class="sec-num">02 &mdash; Data Sources</span>
+    <h2>Three Sources of Truth</h2>
+    <p>The pipeline collects structured, unstructured, and visual data from three primary sources with strict priority ordering.</p>
+  </div>
+  <div class="img-section anim">
+    <img src="images/data-sources.png" alt="Data sources flowing into Gemini AI" loading="lazy">
+  </div>
+  <div class="sources anim">
+    <div class="source">
+      <div class="source-icon" style="background:rgba(153,204,238,.12);color:var(--blue-deep);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <h3>Domo Dashboard</h3>
+      <p>38 cards exported as PDF for Gemini Vision analysis, plus notebook card text extraction and individual table renders.</p>
+      <span class="source-tag" style="background:rgba(153,204,238,.12);color:var(--blue-deep);">Primary #1</span>
+      <ul class="source-meta">
+        <li style="--dot:var(--blue);">Full page PDF export (scale 2.0)</li>
+        <li style="--dot:var(--blue);">Notebook text cards via API</li>
+        <li style="--dot:var(--blue);">Individual table card renders</li>
+        <li style="--dot:var(--blue);">Card metadata (38 cards)</li>
+      </ul>
+    </div>
+    <div class="source">
+      <div class="source-icon" style="background:rgba(173,212,193,.15);color:#4a9e6e;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <h3>MLT Report</h3>
+      <p>Marketing Leadership Team Word document from SharePoint with initiative status updates across 7 functional areas.</p>
+      <span class="source-tag" style="background:rgba(173,212,193,.15);color:#4a9e6e;">Primary #2</span>
+      <ul class="source-meta">
+        <li>Product &amp; Integration updates</li>
+        <li>Paid Search, SEO/GEO status</li>
+        <li>AI &amp; Outbound initiatives</li>
+        <li>Events, Comms &amp; Brand, Regional</li>
+      </ul>
+    </div>
+    <div class="source">
+      <div class="source-icon" style="background:rgba(119,108,176,.12);color:var(--purple);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+      </div>
+      <h3>Marketing Calendar</h3>
+      <p>Excel spreadsheet from SharePoint parsed with openpyxl. Contains event dates, registration counts, and activity timelines.</p>
+      <span class="source-tag" style="background:rgba(119,108,176,.12);color:var(--purple);">Secondary</span>
+      <ul class="source-meta">
+        <li>All worksheets parsed to dicts</li>
+        <li>Event dates &amp; registrations</li>
+        <li>Activity timeline data</li>
+        <li>Calendar section input only</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- AI GENERATION -->
+<div class="sec-alt" id="generation">
+<div class="sec">
+  <div class="sec-hd anim">
+    <span class="sec-num">03 &mdash; AI Generation</span>
+    <h2>Gemini-Powered Synthesis</h2>
+    <p>The pipeline uses Gemini for two distinct tasks: visual analysis of the dashboard PDF, and multi-round report generation with a structured 11-section prompt.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;" class="anim">
+    <div style="background:#fff;border:1px solid var(--n100);border-radius:var(--r-xl);padding:2rem;">
+      <div style="width:48px;height:48px;border-radius:var(--r-md);background:rgba(153,204,238,.12);color:var(--blue-deep);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <h3>Step 1: Vision Analysis</h3>
+      <p style="font-size:.9rem;margin-bottom:.75rem;">Gemini analyzes the full dashboard PDF screenshot to extract every visible number, metric, trend, and regional breakdown.</p>
+      <ul style="list-style:none;font-size:.8125rem;color:var(--n600);">
+        <li style="padding:.25rem 0;">Files &gt;500KB use Gemini File API (resumable upload)</li>
+        <li style="padding:.25rem 0;">Smaller files sent inline as base64</li>
+        <li style="padding:.25rem 0;">Individual table cards rendered separately</li>
+        <li style="padding:.25rem 0;">Temperature: 0.2 (precision mode)</li>
+      </ul>
+    </div>
+    <div style="background:#fff;border:1px solid var(--n100);border-radius:var(--r-xl);padding:2rem;">
+      <div style="width:48px;height:48px;border-radius:var(--r-md);background:rgba(255,153,34,.1);color:var(--orange);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <h3>Step 2: Report Generation</h3>
+      <p style="font-size:.9rem;margin-bottom:.75rem;">Gemini synthesizes all source data into a structured executive report using an 11-section system prompt.</p>
+      <ul style="list-style:none;font-size:.8125rem;color:var(--n600);">
+        <li style="padding:.25rem 0;">Model: gemini-3.1-pro-preview</li>
+        <li style="padding:.25rem 0;">Temperature: 0.3 (consistent, accurate)</li>
+        <li style="padding:.25rem 0;">Max tokens: 16,384</li>
+        <li style="padding:.25rem 0;">Up to 5 refinement rounds</li>
+      </ul>
+    </div>
+  </div>
+  <h3 style="text-align:center;margin-bottom:.5rem;" class="anim">11-Section System Prompt</h3>
+  <p style="text-align:center;font-size:.9rem;margin-bottom:1.5rem;" class="anim">The system instruction defines context, objectives, tone, data priority, output structure, and validation requirements.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.5rem;" class="anim" id="promptSections"></div>
+</div>
+</div>
+
+<!-- QUALITY GRADING -->
+<div id="grading">
+<div class="sec">
+  <div class="sec-hd anim">
+    <span class="sec-num">04 &mdash; Quality Grading</span>
+    <h2>Rubric-Graded, 5-Round Refinement</h2>
+    <p>Every generated report is graded against a 5-criteria rubric. If it doesn't score 100, Gemini refines it with specific feedback.</p>
+  </div>
+  <div class="img-section anim">
+    <img src="images/refinement-loop.png" alt="5-round AI refinement loop with rubric grading" loading="lazy">
+  </div>
+  <div class="grade-grid anim" id="gradeGrid"></div>
+</div>
+</div>
+
+<!-- OUTPUT -->
+<div class="sec-alt" id="output">
+<div class="sec">
+  <div class="sec-hd anim">
+    <span class="sec-num">05 &mdash; Deliverables</span>
+    <h2>Three Outputs, Auto-Delivered</h2>
+    <p>The pipeline produces a Word document, a branded PowerPoint slide, and sends email notifications with links.</p>
+  </div>
+  <div class="img-section anim">
+    <img src="images/deliverables.png" alt="Word document, PowerPoint slide, and email deliverables" loading="lazy">
+  </div>
+  <div class="output-grid anim">
+    <div class="output-card">
+      <div class="output-icon" style="background:rgba(153,204,238,.12);color:var(--blue-deep);">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <h3>Word Document (.docx)</h3>
+      <p>Full executive report with headings, bullets, and formatted sections. Uploaded to SharePoint Executive Staff Prep folder.</p>
+    </div>
+    <div class="output-card">
+      <div class="output-icon" style="background:rgba(255,153,34,.1);color:var(--orange);">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <h3>PowerPoint Slide (.pptx)</h3>
+      <p>Branded single-slide deck with pipeline drivers, key initiatives, and decisions/asks. Domo blue styling with logo.</p>
+    </div>
+    <div class="output-card">
+      <div class="output-icon" style="background:rgba(173,212,193,.15);color:#4a9e6e;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <h3>Email Notification</h3>
+      <p>Sent via Domo Code Engine with direct SharePoint links to both documents. Recipients: leadership team.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- REPORT STRUCTURE -->
+<div id="report">
+<div class="sec">
+  <div class="sec-hd anim">
+    <span class="sec-num">06 &mdash; Report Structure</span>
+    <h2>What the Report Contains</h2>
+    <p>Every report follows a strict structure optimized for time-constrained CMO/executive consumption.</p>
+  </div>
+  <div class="report-sections anim" id="reportSections"></div>
+</div>
+</div>
+
+<!-- INFRASTRUCTURE -->
+<div class="sec-alt" id="infra">
+<div class="sec">
+  <div class="sec-hd anim">
+    <span class="sec-num">07 &mdash; Infrastructure</span>
+    <h2>Cloud-Native, Production-Grade</h2>
+    <p>Deployed on Google Cloud with automated scheduling, secret management, structured logging, and retry resilience.</p>
+  </div>
+  <div class="infra-grid anim">
+    <div class="infra-card">
+      <h3>Cloud Run Jobs</h3>
+      <p>Serverless container execution</p>
+      <ul class="infra-specs">
+        <li>2Gi memory, 2 CPUs</li>
+        <li>15-minute timeout</li>
+        <li>Multi-stage Dockerfile (Python 3.11-slim)</li>
+        <li>Max 1 retry on failure</li>
+      </ul>
+    </div>
+    <div class="infra-card">
+      <h3>Cloud Scheduler</h3>
+      <p>Automated weekly trigger</p>
+      <ul class="infra-specs">
+        <li>Cron: 0 9 * * 5 (Fridays 9am)</li>
+        <li>Timezone: America/Denver (MST)</li>
+        <li>OAuth2 service account auth</li>
+        <li>HTTP POST to Cloud Run Job</li>
+      </ul>
+    </div>
+    <div class="infra-card">
+      <h3>Reliability</h3>
+      <p>Error handling and observability</p>
+      <ul class="infra-specs">
+        <li>Exponential backoff retries (3x)</li>
+        <li>Structured JSON logging (Cloud Logging)</li>
+        <li>Custom exception hierarchy</li>
+        <li>RUN_ID tracing per execution</li>
+        <li>Secrets via Google Secret Manager</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- STATS -->
+<div class="stats-sec" id="stats">
+  <div class="sec-hd anim" style="margin-bottom:2rem;">
+    <span class="sec-num" style="background:rgba(153,204,238,.12);">By The Numbers</span>
+    <h2 style="color:#fff;">The Automation at Scale</h2>
+  </div>
+  <div class="stats-grid" id="statsGrid"></div>
+</div>
+
+<!-- BUILT WITH -->
+<div class="built-with">
+  <div class="built-inner">
+    <div class="anim" style="text-align:center;margin-bottom:2rem;">
+      <h3 style="color:white;margin-bottom:.5rem;">Built With</h3>
+      <p style="color:rgba(255,255,255,.4);font-size:.875rem;">The technologies powering the automation</p>
+    </div>
+    <div class="tech-badges">
+      <span class="tech-badge" style="background:rgba(153,204,238,.1);border-color:rgba(153,204,238,.15);color:var(--blue);">Python 3.11</span>
+      <span class="tech-badge" style="background:rgba(255,153,34,.08);border-color:rgba(255,153,34,.12);color:var(--orange);">Gemini 3.1 Pro</span>
+      <span class="tech-badge" style="background:rgba(153,204,238,.1);border-color:rgba(153,204,238,.15);color:var(--blue);">Google Cloud Run Jobs</span>
+      <span class="tech-badge" style="background:rgba(173,212,193,.1);border-color:rgba(173,212,193,.15);color:var(--mint);">Cloud Scheduler</span>
+      <span class="tech-badge" style="background:rgba(119,108,176,.1);border-color:rgba(119,108,176,.15);color:var(--purple);">SharePoint API</span>
+      <span class="tech-badge" style="background:rgba(153,204,238,.1);border-color:rgba(153,204,238,.15);color:var(--blue);">Domo API</span>
+      <span class="tech-badge" style="background:rgba(255,153,34,.08);border-color:rgba(255,153,34,.12);color:var(--orange);">python-docx</span>
+      <span class="tech-badge" style="background:rgba(193,121,189,.1);border-color:rgba(193,121,189,.15);color:var(--pink);">python-pptx</span>
+      <span class="tech-badge" style="background:rgba(173,212,193,.1);border-color:rgba(173,212,193,.15);color:var(--mint);">openpyxl</span>
+      <span class="tech-badge" style="background:rgba(153,204,238,.1);border-color:rgba(153,204,238,.15);color:var(--blue);">Secret Manager</span>
+    </div>
+  </div>
+</div>
+
+<!-- VERSION -->
+<div class="version-sec">
+  <div class="version-inner">
+    <h3 style="color:white;text-align:center;margin-bottom:1.5rem;font-size:1rem;">Version History</h3>
+    <div class="version-line">
+      <div style="margin-bottom:1.5rem;position:relative;">
+        <div class="version-dot"></div>
+        <div style="font-size:.7rem;font-weight:700;color:var(--blue);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.25rem;">v1.0 &mdash; February 2026</div>
+        <div style="font-size:.875rem;font-weight:600;color:white;margin-bottom:.25rem;">Initial Release</div>
+        <ul style="list-style:none;font-size:.8rem;color:rgba(255,255,255,.4);line-height:1.8;">
+          <li>7-step end-to-end pipeline (collect, vision, prompt, generate, grade, create, deliver)</li>
+          <li>3 data source collectors: Domo Dashboard, MLT Report, Marketing Calendar</li>
+          <li>Gemini Vision analysis of dashboard PDF and individual table cards</li>
+          <li>11-section system prompt with current-week-only rule enforcement</li>
+          <li>5-round rubric-graded refinement loop with specific fix feedback</li>
+          <li>Word document and branded PowerPoint slide generation</li>
+          <li>Email delivery via Domo Code Engine with SharePoint links</li>
+          <li>Weekly archive system with 4-week trend context</li>
+          <li>Cloud Run Jobs with Cloud Scheduler (Fridays 9am MST)</li>
+          <li>Exponential backoff retries, structured logging, custom exceptions</li>
+          <li>Google Secret Manager for credential management</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>Built by Domo Marketing and Growth &mdash; Powered by Google Gemini AI, Domo, and Google Cloud</p>
+  <p style="margin-top:.5rem;font-size:.7rem;color:rgba(255,255,255,.2);">Last updated February 2026 &mdash; v1.0</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  // NAV
+  var nav=document.getElementById("nav"),navToggle=document.getElementById("navToggle"),navLinks=document.getElementById("navLinks");
+  window.addEventListener("scroll",function(){nav.classList.toggle("scrolled",window.scrollY>20);},{passive:true});
+  navToggle.addEventListener("click",function(){navLinks.classList.toggle("open");});
+  navLinks.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){navLinks.classList.remove("open");});});
+  var allSections=document.querySelectorAll("[id]"),linkEls=navLinks.querySelectorAll("a");
+  window.addEventListener("scroll",function(){var c="";allSections.forEach(function(s){if(window.scrollY>=s.offsetTop-120)c=s.id;});linkEls.forEach(function(a){a.classList.toggle("active",a.getAttribute("href")==="#"+c);});},{passive:true});
+
+  // SCROLL ANIM
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e,i){if(e.isIntersecting){setTimeout(function(){e.target.classList.add("vis");},i*50);obs.unobserve(e.target);}});},{threshold:.1});
+  document.querySelectorAll(".anim").forEach(function(el){obs.observe(el);});
+
+  // COUNTERS
+  function animVal(el,s,e,d){var t0=performance.now();function u(t){var p=Math.min((t-t0)/d,1);el.textContent=Math.floor(s+(e-s)*(1-Math.pow(2,-10*p))).toLocaleString();if(p<1)requestAnimationFrame(u);}requestAnimationFrame(u);}
+  var cObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){animVal(e.target,0,parseInt(e.target.dataset.value),1600);cObs.unobserve(e.target);}});},{threshold:.3});
+
+  // STEPS
+  var steps=[
+    {num:1,title:"Collect Data",desc:"3 sources: Domo, SharePoint, Excel",color:"var(--blue)"},
+    {num:2,title:"Vision Analysis",desc:"Gemini reads dashboard PDF",color:"var(--blue-deep)"},
+    {num:3,title:"Build Prompts",desc:"Assemble 11-section prompt",color:"var(--blue)"},
+    {num:4,title:"Generate Report",desc:"Gemini creates executive report",color:"var(--orange)"},
+    {num:5,title:"Grade Quality",desc:"Rubric scoring + refinement",color:"var(--purple)"},
+    {num:6,title:"Create Docs",desc:"Word + PowerPoint output",color:"var(--blue)"},
+    {num:7,title:"Deliver",desc:"Email + SharePoint + archive",color:"var(--mint)"}
+  ];
+  var stepsEl=document.getElementById("stepsGrid");
+  steps.forEach(function(s){
+    var d=document.createElement("div");d.className="step";
+    var n=document.createElement("div");n.className="step-num";n.style.background=s.color;n.textContent=s.num;d.appendChild(n);
+    var h=document.createElement("h4");h.textContent=s.title;d.appendChild(h);
+    var p=document.createElement("p");p.textContent=s.desc;d.appendChild(p);
+    stepsEl.appendChild(d);
+  });
+
+  // PROMPT SECTIONS
+  var prompts=[
+    {name:"Context",desc:"CMO/exec audience"},
+    {name:"Objective",desc:"What changed, why"},
+    {name:"Tone & Style",desc:"Crisp, analytical"},
+    {name:"Data Priority",desc:"Source ranking"},
+    {name:"Current Week Rule",desc:"CRITICAL: no stale data"},
+    {name:"Output Structure",desc:"Required sections"},
+    {name:"What to Avoid",desc:"Vague, fabricated"},
+    {name:"Data Accuracy",desc:"ZERO TOLERANCE"},
+    {name:"Quality Bar",desc:"Pre-submission check"},
+    {name:"Validation Block",desc:"Number + source log"},
+    {name:"Source Data",desc:"All inputs prioritized"}
+  ];
+  var pEl=document.getElementById("promptSections");
+  prompts.forEach(function(p,i){
+    var d=document.createElement("div");
+    d.style.cssText="padding:.75rem;background:white;border:1px solid var(--n100);border-radius:var(--r-md);transition:all .2s;cursor:default;";
+    d.addEventListener("mouseover",function(){d.style.borderColor="rgba(153,204,238,.3)";d.style.boxShadow="var(--sh-sm)";});
+    d.addEventListener("mouseout",function(){d.style.borderColor="var(--n100)";d.style.boxShadow="none";});
+    var num=document.createElement("span");num.style.cssText="font-size:.6rem;font-weight:800;color:var(--blue-deep);letter-spacing:.05em;";
+    num.textContent=(i+1)+". ";
+    var name=document.createElement("span");name.style.cssText="font-size:.8rem;font-weight:600;color:var(--n900);";name.textContent=p.name;
+    var desc=document.createElement("div");desc.style.cssText="font-size:.7rem;color:var(--n200);margin-top:.15rem;";desc.textContent=p.desc;
+    d.appendChild(num);d.appendChild(name);d.appendChild(desc);pEl.appendChild(d);
+  });
+
+  // GRADING
+  var grades=[
+    {name:"Number Accuracy",desc:"ZERO TOLERANCE",color:"#E07070",bg:"rgba(224,112,112,.1)"},
+    {name:"Structure",desc:"All sections present",color:"var(--blue)",bg:"rgba(153,204,238,.12)"},
+    {name:"Content Depth",desc:"Numbers + context",color:"var(--blue)",bg:"rgba(153,204,238,.12)"},
+    {name:"Source Priority",desc:"Correct data usage",color:"var(--mint)",bg:"rgba(173,212,193,.15)"},
+    {name:"Tone & Style",desc:"Analytical, no hype",color:"var(--purple)",bg:"rgba(119,108,176,.12)"}
+  ];
+  var gEl=document.getElementById("gradeGrid");
+  grades.forEach(function(g){
+    var d=document.createElement("div");d.className="grade-item";
+    var icon=document.createElement("div");icon.className="grade-icon";icon.style.background=g.bg;icon.style.color=g.color;
+    var svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+    svg.setAttribute("width","20");svg.setAttribute("height","20");svg.setAttribute("viewBox","0 0 24 24");svg.setAttribute("fill","none");svg.setAttribute("stroke","currentColor");svg.setAttribute("stroke-width","2.5");svg.setAttribute("stroke-linecap","round");
+    var pl=document.createElementNS("http://www.w3.org/2000/svg","polyline");pl.setAttribute("points","20 6 9 17 4 12");svg.appendChild(pl);icon.appendChild(svg);d.appendChild(icon);
+    var h=document.createElement("h4");h.textContent=g.name;d.appendChild(h);
+    var p=document.createElement("p");p.textContent=g.desc;d.appendChild(p);
+    gEl.appendChild(d);
+  });
+
+  // REPORT SECTIONS
+  var rSecs=[
+    {name:"Executive Summary",desc:"2 paragraphs: Pipeline Read + Systemic Read, plus 3 leadership focus items",color:"var(--blue)"},
+    {name:"Key Wins",desc:"5-8 bullets with specific numbers, WoW changes, and pipeline impact",color:"var(--mint)"},
+    {name:"Risks & Watchouts",desc:"3-4 True Risks (named, quantified, timed) + 2-3 Watch Items",color:"#E07070"},
+    {name:"Calendar",desc:"4-6 executive-relevant milestones with dates and registration counts",color:"var(--purple)"},
+    {name:"Regional Highlights",desc:"NAM + EMEA/APAC/Japan with specific metrics per region",color:"var(--blue-deep)"},
+    {name:"Launch & Readiness",desc:"Optional: active launches, content releases, tool updates",color:"var(--orange)"}
+  ];
+  var rsEl=document.getElementById("reportSections");
+  rSecs.forEach(function(s){
+    var d=document.createElement("div");d.className="report-sec";d.style.borderLeftColor=s.color;
+    var h=document.createElement("h4");h.textContent=s.name;d.appendChild(h);
+    var p=document.createElement("p");p.textContent=s.desc;d.appendChild(p);
+    rsEl.appendChild(d);
+  });
+
+  // STATS
+  var stats=[
+    {value:7,label:"Pipeline Steps"},{value:3,label:"Data Sources"},{value:5,label:"Refinement Rounds"},{value:5,label:"Grading Criteria"},
+    {value:38,label:"Dashboard Cards"},{value:11,label:"Prompt Sections"},{value:3,label:"Output Documents"},{value:4,label:"Weekly Archives"}
+  ];
+  var sEl=document.getElementById("statsGrid");
+  stats.forEach(function(s){
+    var card=document.createElement("div");card.className="stat-card anim";
+    var val=document.createElement("div");val.className="stat-val";val.dataset.value=s.value;val.textContent="0";card.appendChild(val);
+    var lbl=document.createElement("div");lbl.className="stat-lbl";lbl.textContent=s.label;card.appendChild(lbl);
+    sEl.appendChild(card);obs.observe(card);cObs.observe(val);
+  });
+})();
+</script>
+</body>
+</html>
