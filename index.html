@@ -35,6 +35,7 @@ img{max-width:100%;height:auto;display:block;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(2rem);}to{opacity:1;transform:translateY(0);}}
 @keyframes pulse{0%,100%{transform:scale(1);opacity:.6;}50%{transform:scale(1.6);opacity:0;}}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+@keyframes loopSpin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
 .anim{opacity:0;transform:translateY(2rem);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out);}
 .anim.vis{opacity:1;transform:translateY(0);}
 @media(prefers-reduced-motion:reduce){.anim{opacity:1;transform:none;}}
@@ -69,7 +70,6 @@ img{max-width:100%;height:auto;display:block;}
 .hero p{color:rgba(255,255,255,.75);font-size:clamp(1rem,1.8vw,1.15rem);font-weight:300;max-width:640px;margin:0 auto 2rem;line-height:1.65;}
 .hero-cta{display:inline-flex;align-items:center;gap:.5rem;padding:.875rem 2rem;background:var(--orange);color:#fff;font-weight:600;font-size:.9375rem;font-family:var(--font);border:none;border-radius:var(--r-md);cursor:pointer;transition:all .3s var(--ease);text-decoration:none;}
 .hero-cta:hover{background:var(--orange-h);transform:translateY(-2px);box-shadow:0 4px 20px rgba(255,153,34,.25);}
-.hero-img{max-width:900px;margin:3rem auto 0;border-radius:var(--r-xl);box-shadow:0 12px 40px rgba(63,69,77,.15);overflow:hidden;}
 
 /* SECTIONS */
 .sec{padding:5rem 1.5rem;max-width:1200px;margin:0 auto;}
@@ -79,19 +79,16 @@ img{max-width:100%;height:auto;display:block;}
 .sec-hd h2{margin-bottom:.75rem;}
 .sec-hd p{max-width:640px;margin:0 auto;font-size:1.0625rem;}
 
-/* IMAGE SECTION */
-.img-section{border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-lg);border:1px solid var(--n100);margin-bottom:2rem;transition:transform .3s var(--ease);}
-.img-section:hover{transform:translateY(-2px);}
-
 /* STEPS */
-.steps{display:grid;grid-template-columns:repeat(7,1fr);gap:.75rem;}
-@media(max-width:992px){.steps{grid-template-columns:repeat(4,1fr);}}
-@media(max-width:600px){.steps{grid-template-columns:repeat(2,1fr);}}
-.step{text-align:center;padding:1.25rem .75rem;background:#fff;border:1px solid var(--n100);border-radius:var(--r-lg);transition:all .3s var(--ease);}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
+@media(max-width:768px){.steps{grid-template-columns:repeat(2,1fr);}}
+.step{text-align:center;padding:1.75rem 1rem;background:#fff;border:1px solid var(--n100);border-radius:var(--r-lg);transition:all .3s var(--ease);position:relative;}
 .step:hover{box-shadow:var(--sh-md);transform:translateY(-2px);border-color:rgba(153,204,238,.3);}
-.step-num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;font-weight:800;font-size:.8125rem;color:#fff;margin-bottom:.5rem;}
-.step h4{font-size:.8125rem;margin-bottom:.15rem;}
-.step p{font-size:.7rem;}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;font-weight:800;font-size:.875rem;color:#fff;margin-bottom:.625rem;}
+.step h4{font-size:.875rem;margin-bottom:.25rem;}
+.step p{font-size:.75rem;}
+.step-arrow{position:absolute;right:-14px;top:50%;transform:translateY(-50%);color:var(--n200);font-size:1.25rem;z-index:2;}
+@media(max-width:768px){.step-arrow{display:none;}}
 
 /* SOURCE CARDS */
 .sources{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
@@ -104,16 +101,29 @@ img{max-width:100%;height:auto;display:block;}
 .source-tag{display:inline-block;padding:.2rem .6rem;border-radius:100px;font-size:.65rem;font-weight:700;letter-spacing:.03em;}
 .source-meta{list-style:none;margin-top:.75rem;}
 .source-meta li{font-size:.8rem;padding:.25rem 0;color:var(--n600);display:flex;align-items:center;gap:.35rem;}
-.source-meta li::before{content:'';width:4px;height:4px;border-radius:50%;flex-shrink:0;}
+.source-meta li::before{content:'';width:4px;height:4px;border-radius:50%;flex-shrink:0;background:var(--blue);}
 
-/* GRADING */
-.grade-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;}
-@media(max-width:768px){.grade-grid{grid-template-columns:repeat(2,1fr);}}
-.grade-item{text-align:center;padding:1.5rem 1rem;background:#fff;border:1px solid var(--n100);border-radius:var(--r-lg);transition:all .3s var(--ease);}
-.grade-item:hover{box-shadow:var(--sh-md);transform:translateY(-2px);}
-.grade-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;}
-.grade-item h4{font-size:.8125rem;margin-bottom:.15rem;}
-.grade-item p{font-size:.7rem;}
+/* RALPH LOOP */
+.ralph-section{background:linear-gradient(135deg,#2D3239 0%,var(--n900) 100%);border-radius:var(--r-xl);padding:3rem;margin-bottom:2rem;position:relative;overflow:hidden;}
+.ralph-section::before{content:'';position:absolute;top:-50%;right:-20%;width:300px;height:300px;border:2px dashed rgba(255,153,34,.15);border-radius:50%;animation:loopSpin 20s linear infinite;}
+.ralph-section::after{content:'';position:absolute;bottom:-30%;left:-10%;width:200px;height:200px;border:2px dashed rgba(153,204,238,.1);border-radius:50%;animation:loopSpin 15s linear infinite reverse;}
+.ralph-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;position:relative;z-index:1;}
+.ralph-icon{width:56px;height:56px;border-radius:50%;background:rgba(255,153,34,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ralph-title{font-size:1.5rem;font-weight:800;color:#fff;}
+.ralph-subtitle{font-size:.9rem;color:rgba(255,255,255,.5);font-weight:400;}
+.ralph-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;position:relative;z-index:1;}
+@media(max-width:768px){.ralph-flow{grid-template-columns:repeat(2,1fr);}}
+.ralph-step{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-lg);padding:1.25rem;text-align:center;transition:all .3s var(--ease);}
+.ralph-step:hover{background:rgba(255,255,255,.1);border-color:rgba(255,153,34,.2);}
+.ralph-step-num{font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:.5rem;}
+.ralph-step h4{color:#fff;font-size:.875rem;margin-bottom:.25rem;}
+.ralph-step p{font-size:.75rem;color:rgba(255,255,255,.4);}
+.ralph-loop-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:rgba(255,153,34,.1);border:1px solid rgba(255,153,34,.2);border-radius:100px;color:var(--orange);font-size:.8rem;font-weight:700;margin-top:1.5rem;position:relative;z-index:1;}
+.ralph-criteria{display:grid;grid-template-columns:repeat(5,1fr);gap:.75rem;margin-top:1.5rem;position:relative;z-index:1;}
+@media(max-width:768px){.ralph-criteria{grid-template-columns:repeat(2,1fr);}}
+.ralph-criterion{text-align:center;padding:1rem .75rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:var(--r-md);}
+.ralph-criterion h4{color:rgba(255,255,255,.8);font-size:.75rem;margin-bottom:.15rem;}
+.ralph-criterion p{font-size:.65rem;color:rgba(255,255,255,.3);}
 
 /* OUTPUT */
 .output-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
@@ -150,7 +160,7 @@ img{max-width:100%;height:auto;display:block;}
 .stat-val{font-size:2.75rem;font-weight:300;color:var(--blue);line-height:1.1;margin-bottom:.375rem;}
 .stat-lbl{font-size:.8125rem;font-weight:600;color:rgba(255,255,255,.4);letter-spacing:.03em;}
 
-/* FOOTER SECTIONS */
+/* FOOTER */
 .built-with{background:var(--n900);padding:3rem 1.5rem 0;}
 .built-inner{max-width:1200px;margin:0 auto;}
 .tech-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,.06);}
@@ -158,7 +168,7 @@ img{max-width:100%;height:auto;display:block;}
 .version-sec{background:var(--n900);padding:2.5rem 1.5rem;}
 .version-inner{max-width:800px;margin:0 auto;}
 .version-line{border-left:2px solid rgba(153,204,238,.2);padding-left:1.5rem;margin-left:.5rem;}
-.version-dot{position:absolute;left:-1.85rem;top:.25rem;width:10px;height:10px;border-radius:50%;background:var(--blue);}
+.version-dot{position:absolute;left:-1.85rem;top:.25rem;width:10px;height:10px;border-radius:50%;}
 .footer{background:#2D3239;border-top:1px solid rgba(255,255,255,.05);padding:2rem 1.5rem;text-align:center;}
 .footer p{font-size:.8125rem;color:rgba(255,255,255,.3);}
 .footer a{color:var(--blue);}
@@ -176,8 +186,7 @@ img{max-width:100%;height:auto;display:block;}
     <div class="nav-links" id="navLinks">
       <a href="#pipeline">Pipeline</a>
       <a href="#sources">Sources</a>
-      <a href="#generation">AI Generation</a>
-      <a href="#grading">Quality</a>
+      <a href="#grading">Ralph's Loop</a>
       <a href="#output">Output</a>
       <a href="#report">Report</a>
       <a href="#infra">Infrastructure</a>
@@ -194,13 +203,13 @@ img{max-width:100%;height:auto;display:block;}
   <div class="hero-in" style="animation:fadeUp 1s var(--ease-out) .2s both;">
     <div class="hero-badge"><span class="hero-dot"></span> Runs Every Friday at 9am MST</div>
     <h1>Weekly Executive Report Automation</h1>
-    <p>An AI-powered pipeline that collects data from 3 sources, generates a rubric-graded executive report with Gemini, and delivers a branded talk track and slide deck for CMO review every week.</p>
+    <p>A 4-step Domo-native pipeline that reads 41 dashboard cards, generates a rubric-graded executive report with DomoGPT, and delivers an HTML email with PDF attachment -- all inside Domo.</p>
     <a href="#pipeline" class="hero-cta">
       See How It Works
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </a>
-    <div class="hero-img">
-      <img src="images/pipeline-flow.png" alt="7-step pipeline flow diagram" loading="eager">
+    <div style="max-width:900px;margin:3rem auto 0;border-radius:var(--r-xl);box-shadow:0 12px 40px rgba(63,69,77,.15);overflow:hidden;">
+      <img src="images/pipeline-flow-v2.png" alt="4-step Domo-native pipeline: Collect, Generate, Grade & Refine (Ralph's Loop), Format & Deliver" loading="eager">
     </div>
   </div>
 </section>
@@ -210,8 +219,8 @@ img{max-width:100%;height:auto;display:block;}
 <div class="sec">
   <div class="sec-hd anim">
     <span class="sec-num">01 &mdash; Pipeline</span>
-    <h2>7 Steps, Fully Automated</h2>
-    <p>Every Friday at 9am, Cloud Scheduler triggers a Cloud Run job that executes the full pipeline end-to-end.</p>
+    <h2>4 Steps, 100% Inside Domo</h2>
+    <p>Every Friday at 9am, a Domo Workflow fires a TIMER trigger that executes four Code Engine functions in sequence -- collect, generate, grade, deliver.</p>
   </div>
   <div class="steps anim" id="stepsGrid"></div>
 </div>
@@ -223,10 +232,7 @@ img{max-width:100%;height:auto;display:block;}
   <div class="sec-hd anim">
     <span class="sec-num">02 &mdash; Data Sources</span>
     <h2>Three Sources of Truth</h2>
-    <p>The pipeline collects structured, unstructured, and visual data from three primary sources with strict priority ordering.</p>
-  </div>
-  <div class="img-section anim">
-    <img src="images/data-sources.png" alt="Data sources flowing into Gemini AI" loading="lazy">
+    <p>The pipeline reads live card data from the Domo dashboard via API, plus two supplementary Domo datasets uploaded from SharePoint.</p>
   </div>
   <div class="sources anim">
     <div class="source">
@@ -234,13 +240,13 @@ img{max-width:100%;height:auto;display:block;}
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
       </div>
       <h3>Domo Dashboard</h3>
-      <p>38 cards exported as PDF for Gemini Vision analysis, plus notebook card text extraction and individual table renders.</p>
+      <p>41 cards read directly via the Domo API -- KPI values, gauges, notebook text, and table data. No screenshots, no vision model. Just the raw data a human sees.</p>
       <span class="source-tag" style="background:rgba(153,204,238,.12);color:var(--blue-deep);">Primary #1</span>
       <ul class="source-meta">
-        <li style="--dot:var(--blue);">Full page PDF export (scale 2.0)</li>
-        <li style="--dot:var(--blue);">Notebook text cards via API</li>
-        <li style="--dot:var(--blue);">Individual table card renders</li>
-        <li style="--dot:var(--blue);">Card metadata (38 cards)</li>
+        <li>Notebook cards split into THIS WEEK / PRIOR WEEKS</li>
+        <li>KPI card definitions + summary values</li>
+        <li>Table card datasets queried via SQL</li>
+        <li>Card metadata for all 41 cards</li>
       </ul>
     </div>
     <div class="source">
@@ -248,7 +254,7 @@ img{max-width:100%;height:auto;display:block;}
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       </div>
       <h3>MLT Report</h3>
-      <p>Marketing Leadership Team Word document from SharePoint with initiative status updates across 7 functional areas.</p>
+      <p>Marketing Leadership Team report uploaded as a Domo dataset. Contains initiative status updates across all functional areas.</p>
       <span class="source-tag" style="background:rgba(173,212,193,.15);color:#4a9e6e;">Primary #2</span>
       <ul class="source-meta">
         <li>Product &amp; Integration updates</li>
@@ -262,12 +268,12 @@ img{max-width:100%;height:auto;display:block;}
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
       </div>
       <h3>Marketing Calendar</h3>
-      <p>Excel spreadsheet from SharePoint parsed with openpyxl. Contains event dates, registration counts, and activity timelines.</p>
+      <p>Excel spreadsheet uploaded as a Domo dataset. Contains event dates, registration counts, and activity timelines.</p>
       <span class="source-tag" style="background:rgba(119,108,176,.12);color:var(--purple);">Secondary</span>
       <ul class="source-meta">
-        <li>All worksheets parsed to dicts</li>
         <li>Event dates &amp; registrations</li>
         <li>Activity timeline data</li>
+        <li>Campaign milestones</li>
         <li>Calendar section input only</li>
       </ul>
     </div>
@@ -275,105 +281,150 @@ img{max-width:100%;height:auto;display:block;}
 </div>
 </div>
 
-<!-- AI GENERATION -->
-<div class="sec-alt" id="generation">
+<!-- RALPH'S LOOP (Quality Grading) -->
+<div class="sec-alt" id="grading">
 <div class="sec">
   <div class="sec-hd anim">
-    <span class="sec-num">03 &mdash; AI Generation</span>
-    <h2>Gemini-Powered Synthesis</h2>
-    <p>The pipeline uses Gemini for two distinct tasks: visual analysis of the dashboard PDF, and multi-round report generation with a structured 11-section prompt.</p>
+    <span class="sec-num">03 &mdash; Ralph's Loop</span>
+    <h2>Grade Until Perfection</h2>
+    <p>Every report is graded against a 5-criteria rubric by DomoGPT. If it doesn't pass, the AI refines it with specific feedback and tries again. Up to 10 rounds. We don't lower the bar -- we raise the report.</p>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;" class="anim">
+
+  <div class="ralph-section anim">
+    <div class="ralph-header">
+      <div class="ralph-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF9922" stroke-width="2" stroke-linecap="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg>
+      </div>
+      <div>
+        <div class="ralph-title">The Loop</div>
+        <div class="ralph-subtitle">Named after Ralph Waldo Emerson: "That which we persist in doing becomes easier -- not that the task itself has become easier, but that our ability to perform it has improved."</div>
+      </div>
+    </div>
+
+    <div class="ralph-flow">
+      <div class="ralph-step">
+        <div class="ralph-step-num">Step A</div>
+        <h4>Grade Draft</h4>
+        <p>DomoGPT scores the report against 5 criteria with specific line-level feedback</p>
+      </div>
+      <div class="ralph-step">
+        <div class="ralph-step-num">Step B</div>
+        <h4>Pass or Fail?</h4>
+        <p>Score >= 80 on every criterion means pass. Any criterion below = fail the whole report</p>
+      </div>
+      <div class="ralph-step">
+        <div class="ralph-step-num">Step C</div>
+        <h4>Refine with Feedback</h4>
+        <p>Failed criteria become specific instructions: "fix X in paragraph Y, the correct number is Z"</p>
+      </div>
+      <div class="ralph-step">
+        <div class="ralph-step-num">Step D</div>
+        <h4>Loop Back</h4>
+        <p>New draft replaces old. Re-grade from scratch. Repeat until perfect or 10 attempts</p>
+      </div>
+    </div>
+
+    <div style="text-align:center;">
+      <div class="ralph-loop-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg>
+        Up to 10 rounds -- we never lower the bar
+      </div>
+    </div>
+
+    <div class="ralph-criteria">
+      <div class="ralph-criterion">
+        <h4>Number Accuracy</h4>
+        <p>ZERO TOLERANCE for fabricated numbers</p>
+      </div>
+      <div class="ralph-criterion">
+        <h4>Structure</h4>
+        <p>All required sections present</p>
+      </div>
+      <div class="ralph-criterion">
+        <h4>Content Depth</h4>
+        <p>Numbers + context + WoW changes</p>
+      </div>
+      <div class="ralph-criterion">
+        <h4>Source Priority</h4>
+        <p>Correct data source usage</p>
+      </div>
+      <div class="ralph-criterion">
+        <h4>Tone & Style</h4>
+        <p>Analytical, no marketing hype</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;" class="anim">
     <div style="background:#fff;border:1px solid var(--n100);border-radius:var(--r-xl);padding:2rem;">
       <div style="width:48px;height:48px;border-radius:var(--r-md);background:rgba(153,204,238,.12);color:var(--blue-deep);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
       </div>
-      <h3>Step 1: Vision Analysis</h3>
-      <p style="font-size:.9rem;margin-bottom:.75rem;">Gemini analyzes the full dashboard PDF screenshot to extract every visible number, metric, trend, and regional breakdown.</p>
+      <h3>DomoGPT Generation</h3>
+      <p style="font-size:.9rem;margin-bottom:.75rem;">The pipeline uses DomoGPT (Claude/Anthropic) to synthesize all source data into a structured executive report using an 11-section system prompt.</p>
       <ul style="list-style:none;font-size:.8125rem;color:var(--n600);">
-        <li style="padding:.25rem 0;">Files &gt;500KB use Gemini File API (resumable upload)</li>
-        <li style="padding:.25rem 0;">Smaller files sent inline as base64</li>
-        <li style="padding:.25rem 0;">Individual table cards rendered separately</li>
-        <li style="padding:.25rem 0;">Temperature: 0.2 (precision mode)</li>
+        <li style="padding:.25rem 0;">Model: DomoGPT Medium v1.1 (Anthropic)</li>
+        <li style="padding:.25rem 0;">Temperature: 0.3 (consistent, accurate)</li>
+        <li style="padding:.25rem 0;">Max tokens: 8,000</li>
+        <li style="padding:.25rem 0;">Full 11-section system prompt</li>
       </ul>
     </div>
     <div style="background:#fff;border:1px solid var(--n100);border-radius:var(--r-xl);padding:2rem;">
       <div style="width:48px;height:48px;border-radius:var(--r-md);background:rgba(255,153,34,.1);color:var(--orange);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M23 4v6h-6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/></svg>
       </div>
-      <h3>Step 2: Report Generation</h3>
-      <p style="font-size:.9rem;margin-bottom:.75rem;">Gemini synthesizes all source data into a structured executive report using an 11-section system prompt.</p>
+      <h3>DomoGPT Grading</h3>
+      <p style="font-size:.9rem;margin-bottom:.75rem;">A separate DomoGPT call grades the report against 5 criteria with granular scoring and specific fix instructions for each failure.</p>
       <ul style="list-style:none;font-size:.8125rem;color:var(--n600);">
-        <li style="padding:.25rem 0;">Model: gemini-3.1-pro-preview</li>
-        <li style="padding:.25rem 0;">Temperature: 0.3 (consistent, accurate)</li>
-        <li style="padding:.25rem 0;">Max tokens: 16,384</li>
-        <li style="padding:.25rem 0;">Up to 5 refinement rounds</li>
+        <li style="padding:.25rem 0;">5 criteria scored individually</li>
+        <li style="padding:.25rem 0;">Each criterion must hit >= 80</li>
+        <li style="padding:.25rem 0;">Specific feedback per failed criterion</li>
+        <li style="padding:.25rem 0;">Draft stored in AppDB between rounds</li>
       </ul>
     </div>
   </div>
-  <h3 style="text-align:center;margin-bottom:.5rem;" class="anim">11-Section System Prompt</h3>
-  <p style="text-align:center;font-size:.9rem;margin-bottom:1.5rem;" class="anim">The system instruction defines context, objectives, tone, data priority, output structure, and validation requirements.</p>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.5rem;" class="anim" id="promptSections"></div>
-</div>
-</div>
-
-<!-- QUALITY GRADING -->
-<div id="grading">
-<div class="sec">
-  <div class="sec-hd anim">
-    <span class="sec-num">04 &mdash; Quality Grading</span>
-    <h2>Rubric-Graded, 5-Round Refinement</h2>
-    <p>Every generated report is graded against a 5-criteria rubric. If it doesn't score 100, Gemini refines it with specific feedback.</p>
-  </div>
-  <div class="img-section anim">
-    <img src="images/refinement-loop.png" alt="5-round AI refinement loop with rubric grading" loading="lazy">
-  </div>
-  <div class="grade-grid anim" id="gradeGrid"></div>
 </div>
 </div>
 
 <!-- OUTPUT -->
-<div class="sec-alt" id="output">
+<div id="output">
 <div class="sec">
   <div class="sec-hd anim">
-    <span class="sec-num">05 &mdash; Deliverables</span>
-    <h2>Two Deliverables, Review-Ready</h2>
-    <p>The pipeline produces two documents &mdash; a talk track and a branded slide &mdash; uploaded to SharePoint for review before going to the CMO.</p>
-  </div>
-  <div class="img-section anim">
-    <img src="images/deliverables-v2.png" alt="Talk track and pipeline slide deliverables with review workflow" loading="lazy">
+    <span class="sec-num">04 &mdash; Deliverables</span>
+    <h2>Email with PDF, Ready for CMO</h2>
+    <p>The pipeline delivers a branded HTML email with the full report inline and a PDF attachment -- sent directly to the review team via Domo's email API.</p>
   </div>
   <div class="output-grid anim">
     <div class="output-card">
       <div class="output-icon" style="background:rgba(153,204,238,.12);color:var(--blue-deep);">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       </div>
-      <h3>Talk Track (.docx)</h3>
-      <p>Full executive report with headings, bullets, and formatted sections. Uploaded to SharePoint for review before the CMO meeting.</p>
+      <h3>HTML Email</h3>
+      <p>Branded HTML email with the full report rendered inline. Executive summary, key wins, risks, calendar -- all formatted for quick consumption in any email client.</p>
     </div>
     <div class="output-card">
       <div class="output-icon" style="background:rgba(255,153,34,.1);color:var(--orange);">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       </div>
-      <h3>Pipeline Slide (.pptx)</h3>
-      <p>Branded single-slide deck with pipeline drivers, key initiatives, and decisions/asks. Ready for the CMO's executive staff meeting.</p>
+      <h3>PDF Attachment</h3>
+      <p>The full report rendered as a PDF using pdf-lib in Code Engine. Attached directly to the email as a real file -- not a link, not a redirect.</p>
     </div>
     <div class="output-card">
       <div class="output-icon" style="background:rgba(173,212,193,.15);color:#4a9e6e;">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
       </div>
-      <h3>Review Notification</h3>
-      <p>Email sent to Lacy Zimmerman via Domo Code Engine with SharePoint links to both documents for review before sending to the CMO.</p>
+      <h3>AppDB Archive</h3>
+      <p>Every report, grade, and source snapshot is archived in Domo AppDB. Provides 4-week trend context for the next generation cycle.</p>
     </div>
   </div>
 </div>
 </div>
 
 <!-- REPORT STRUCTURE -->
-<div id="report">
+<div class="sec-alt" id="report">
 <div class="sec">
   <div class="sec-hd anim">
-    <span class="sec-num">06 &mdash; Report Structure</span>
+    <span class="sec-num">05 &mdash; Report Structure</span>
     <h2>What the Report Contains</h2>
     <p>Every report follows a strict structure optimized for time-constrained CMO/executive consumption.</p>
   </div>
@@ -382,43 +433,44 @@ img{max-width:100%;height:auto;display:block;}
 </div>
 
 <!-- INFRASTRUCTURE -->
-<div class="sec-alt" id="infra">
+<div id="infra">
 <div class="sec">
   <div class="sec-hd anim">
-    <span class="sec-num">07 &mdash; Infrastructure</span>
-    <h2>Cloud-Native, Production-Grade</h2>
-    <p>Deployed on Google Cloud with automated scheduling, secret management, structured logging, and retry resilience.</p>
+    <span class="sec-num">06 &mdash; Infrastructure</span>
+    <h2>Domo-Native, Zero External Dependencies</h2>
+    <p>The entire pipeline runs inside Domo -- Workflows for orchestration, Code Engine for compute, AppDB for state, and DomoGPT for AI. No GCP, no external APIs.</p>
   </div>
   <div class="infra-grid anim">
     <div class="infra-card">
-      <h3>Cloud Run Jobs</h3>
-      <p>Serverless container execution</p>
+      <h3>Domo Workflows</h3>
+      <p>Pipeline orchestration</p>
       <ul class="infra-specs">
-        <li>2Gi memory, 2 CPUs</li>
-        <li>15-minute timeout</li>
-        <li>Multi-stage Dockerfile (Python 3.11-slim)</li>
-        <li>Max 1 retry on failure</li>
+        <li>4 Code Engine steps in sequence</li>
+        <li>Ralph's Loop on grade_and_refine</li>
+        <li>TIMER trigger: Fridays 9am MST</li>
+        <li>Manual trigger for ad-hoc runs</li>
       </ul>
     </div>
     <div class="infra-card">
-      <h3>Cloud Scheduler</h3>
-      <p>Automated weekly trigger</p>
+      <h3>Code Engine</h3>
+      <p>Serverless JavaScript functions</p>
       <ul class="infra-specs">
-        <li>Cron: 0 9 * * 5 (Fridays 9am)</li>
-        <li>Timezone: America/Denver (MST)</li>
-        <li>OAuth2 service account auth</li>
-        <li>HTTP POST to Cloud Run Job</li>
+        <li>4 packages, 1 function each</li>
+        <li>collect_data (41 cards + datasets)</li>
+        <li>generate_report (DomoGPT synthesis)</li>
+        <li>grade_and_refine (Ralph's Loop)</li>
+        <li>format_and_deliver (PDF + email)</li>
       </ul>
     </div>
     <div class="infra-card">
-      <h3>Reliability</h3>
-      <p>Error handling and observability</p>
+      <h3>State Management</h3>
+      <p>AppDB collections</p>
       <ul class="infra-specs">
-        <li>Exponential backoff retries (3x)</li>
-        <li>Structured JSON logging (Cloud Logging)</li>
-        <li>Custom exception hierarchy</li>
-        <li>RUN_ID tracing per execution</li>
-        <li>Secrets via Google Secret Manager</li>
+        <li>State collection: drafts, grades, final</li>
+        <li>Archive collection: weekly history</li>
+        <li>Data passes between steps via AppDB</li>
+        <li>4-week trend context for generation</li>
+        <li>FileSet for PDF storage</li>
       </ul>
     </div>
   </div>
@@ -439,19 +491,18 @@ img{max-width:100%;height:auto;display:block;}
   <div class="built-inner">
     <div class="anim" style="text-align:center;margin-bottom:2rem;">
       <h3 style="color:white;margin-bottom:.5rem;">Built With</h3>
-      <p style="color:rgba(255,255,255,.4);font-size:.875rem;">The technologies powering the automation</p>
+      <p style="color:rgba(255,255,255,.4);font-size:.875rem;">100% Domo platform -- no external services</p>
     </div>
     <div class="tech-badges">
-      <span class="tech-badge" style="background:rgba(153,204,238,.1);border-color:rgba(153,204,238,.15);color:var(--blue);">Python 3.11</span>
-      <span class="tech-badge" style="background:rgba(255,153,34,.08);border-color:rgba(255,153,34,.12);color:var(--orange);">Gemini 3.1 Pro</span>
-      <span class="tech-badge" style="background:rgba(153,204,238,.1);border-color:rgba(153,204,238,.15);color:var(--blue);">Google Cloud Run Jobs</span>
-      <span class="tech-badge" style="background:rgba(173,212,193,.1);border-color:rgba(173,212,193,.15);color:var(--mint);">Cloud Scheduler</span>
-      <span class="tech-badge" style="background:rgba(119,108,176,.1);border-color:rgba(119,108,176,.15);color:var(--purple);">SharePoint API</span>
-      <span class="tech-badge" style="background:rgba(153,204,238,.1);border-color:rgba(153,204,238,.15);color:var(--blue);">Domo API</span>
-      <span class="tech-badge" style="background:rgba(255,153,34,.08);border-color:rgba(255,153,34,.12);color:var(--orange);">python-docx</span>
-      <span class="tech-badge" style="background:rgba(193,121,189,.1);border-color:rgba(193,121,189,.15);color:var(--pink);">python-pptx</span>
-      <span class="tech-badge" style="background:rgba(173,212,193,.1);border-color:rgba(173,212,193,.15);color:var(--mint);">openpyxl</span>
-      <span class="tech-badge" style="background:rgba(153,204,238,.1);border-color:rgba(153,204,238,.15);color:var(--blue);">Secret Manager</span>
+      <span class="tech-badge" style="background:rgba(153,204,238,.1);border-color:rgba(153,204,238,.15);color:var(--blue);">Domo Workflows</span>
+      <span class="tech-badge" style="background:rgba(255,153,34,.08);border-color:rgba(255,153,34,.12);color:var(--orange);">Domo Code Engine</span>
+      <span class="tech-badge" style="background:rgba(153,204,238,.1);border-color:rgba(153,204,238,.15);color:var(--blue);">DomoGPT (Claude)</span>
+      <span class="tech-badge" style="background:rgba(173,212,193,.1);border-color:rgba(173,212,193,.15);color:var(--mint);">AppDB</span>
+      <span class="tech-badge" style="background:rgba(119,108,176,.1);border-color:rgba(119,108,176,.15);color:var(--purple);">Domo Datasets</span>
+      <span class="tech-badge" style="background:rgba(153,204,238,.1);border-color:rgba(153,204,238,.15);color:var(--blue);">Domo Email API</span>
+      <span class="tech-badge" style="background:rgba(255,153,34,.08);border-color:rgba(255,153,34,.12);color:var(--orange);">pdf-lib</span>
+      <span class="tech-badge" style="background:rgba(193,121,189,.1);border-color:rgba(193,121,189,.15);color:var(--pink);">Domo FileSet</span>
+      <span class="tech-badge" style="background:rgba(173,212,193,.1);border-color:rgba(173,212,193,.15);color:var(--mint);">TIMER Trigger</span>
     </div>
   </div>
 </div>
@@ -461,22 +512,36 @@ img{max-width:100%;height:auto;display:block;}
   <div class="version-inner">
     <h3 style="color:white;text-align:center;margin-bottom:1.5rem;font-size:1rem;">Version History</h3>
     <div class="version-line">
-      <div style="margin-bottom:1.5rem;position:relative;">
-        <div class="version-dot"></div>
-        <div style="font-size:.7rem;font-weight:700;color:var(--blue);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.25rem;">v1.0 &mdash; February 2026</div>
-        <div style="font-size:.875rem;font-weight:600;color:white;margin-bottom:.25rem;">Initial Release</div>
+      <div style="margin-bottom:2rem;position:relative;">
+        <div class="version-dot" style="background:var(--orange);"></div>
+        <div style="font-size:.7rem;font-weight:700;color:var(--orange);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.25rem;">v2.0 &mdash; March 2026</div>
+        <div style="font-size:.875rem;font-weight:600;color:white;margin-bottom:.25rem;">Domo-Native Migration</div>
         <ul style="list-style:none;font-size:.8rem;color:rgba(255,255,255,.4);line-height:1.8;">
-          <li>7-step end-to-end pipeline (collect, vision, prompt, generate, grade, create, deliver)</li>
-          <li>3 data source collectors: Domo Dashboard, MLT Report, Marketing Calendar</li>
-          <li>Gemini Vision analysis of dashboard PDF and individual table cards</li>
-          <li>11-section system prompt with current-week-only rule enforcement</li>
-          <li>5-round rubric-graded refinement loop with specific fix feedback</li>
-          <li>Word document and branded PowerPoint slide generation</li>
-          <li>Review notification to Lacy Zimmerman via Domo Code Engine</li>
-          <li>Weekly archive system with 4-week trend context</li>
-          <li>Cloud Run Jobs with Cloud Scheduler (Fridays 9am MST)</li>
-          <li>Exponential backoff retries, structured logging, custom exceptions</li>
-          <li>Google Secret Manager for credential management</li>
+          <li>Migrated from GCP (Cloud Run + Cloud Scheduler) to 100% Domo-native</li>
+          <li>Replaced Gemini AI with DomoGPT (Claude/Anthropic) for generation and grading</li>
+          <li>Replaced PDF screenshot + Gemini Vision with direct card data reads (41 cards via API)</li>
+          <li>Replaced SharePoint API with Domo datasets for MLT Report and Marketing Calendar</li>
+          <li>Replaced Word + PowerPoint output with HTML email + PDF attachment</li>
+          <li>4-step Domo Workflow: collect, generate, grade, deliver</li>
+          <li>4 Code Engine packages with versioned releases</li>
+          <li>Ralph's Loop: up to 10 refinement rounds (was 5)</li>
+          <li>AppDB state management between pipeline steps</li>
+          <li>AppDB archive with 4-week trend context</li>
+          <li>FileSet for PDF attachment storage</li>
+          <li>Domo TIMER trigger (Fridays 9am MST)</li>
+        </ul>
+      </div>
+      <div style="margin-bottom:1.5rem;position:relative;">
+        <div class="version-dot" style="background:var(--blue);"></div>
+        <div style="font-size:.7rem;font-weight:700;color:var(--blue);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.25rem;">v1.0 &mdash; February 2026</div>
+        <div style="font-size:.875rem;font-weight:600;color:white;margin-bottom:.25rem;">Initial Release (GCP)</div>
+        <ul style="list-style:none;font-size:.8rem;color:rgba(255,255,255,.4);line-height:1.8;">
+          <li>7-step pipeline on Google Cloud Run Jobs</li>
+          <li>Gemini Vision for dashboard PDF analysis</li>
+          <li>SharePoint API for MLT Report and Marketing Calendar</li>
+          <li>Word document + branded PowerPoint slide generation</li>
+          <li>5-round rubric-graded refinement loop</li>
+          <li>Cloud Scheduler (Fridays 9am MST)</li>
         </ul>
       </div>
     </div>
@@ -484,8 +549,8 @@ img{max-width:100%;height:auto;display:block;}
 </div>
 
 <footer class="footer">
-  <p>Built by Domo Marketing and Growth &mdash; Powered by Google Gemini AI, Domo, and Google Cloud</p>
-  <p style="margin-top:.5rem;font-size:.7rem;color:rgba(255,255,255,.2);">Last updated February 2026 &mdash; v1.0</p>
+  <p>Built by Domo Marketing and Growth &mdash; Powered by DomoGPT, Domo Workflows, and Domo Code Engine</p>
+  <p style="margin-top:.5rem;font-size:.7rem;color:rgba(255,255,255,.2);">Last updated March 2026 &mdash; v2.0</p>
 </footer>
 
 <script>
@@ -508,70 +573,21 @@ img{max-width:100%;height:auto;display:block;}
   function animVal(el,s,e,d){var t0=performance.now();function u(t){var p=Math.min((t-t0)/d,1);el.textContent=Math.floor(s+(e-s)*(1-Math.pow(2,-10*p))).toLocaleString();if(p<1)requestAnimationFrame(u);}requestAnimationFrame(u);}
   var cObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){animVal(e.target,0,parseInt(e.target.dataset.value),1600);cObs.unobserve(e.target);}});},{threshold:.3});
 
-  // STEPS
+  // STEPS (4 steps now)
   var steps=[
-    {num:1,title:"Collect Data",desc:"3 sources: Domo, SharePoint, Excel",color:"var(--blue)"},
-    {num:2,title:"Vision Analysis",desc:"Gemini reads dashboard PDF",color:"var(--blue-deep)"},
-    {num:3,title:"Build Prompts",desc:"Assemble 11-section prompt",color:"var(--blue)"},
-    {num:4,title:"Generate Report",desc:"Gemini creates executive report",color:"var(--orange)"},
-    {num:5,title:"Grade Quality",desc:"Rubric scoring + refinement",color:"var(--purple)"},
-    {num:6,title:"Create Docs",desc:"Word + PowerPoint output",color:"var(--blue)"},
-    {num:7,title:"Deliver",desc:"Notify reviewer + archive",color:"var(--mint)"}
+    {num:1,title:"Collect Data",desc:"41 cards, notebooks, calendar, MLT report",color:"var(--blue)"},
+    {num:2,title:"Generate Report",desc:"DomoGPT synthesizes all sources",color:"var(--orange)"},
+    {num:3,title:"Grade & Refine",desc:"Ralph's Loop -- up to 10 rounds",color:"var(--purple)"},
+    {num:4,title:"Format & Deliver",desc:"PDF + HTML email + archive",color:"var(--mint)"}
   ];
   var stepsEl=document.getElementById("stepsGrid");
-  steps.forEach(function(s){
+  steps.forEach(function(s,i){
     var d=document.createElement("div");d.className="step";
     var n=document.createElement("div");n.className="step-num";n.style.background=s.color;n.textContent=s.num;d.appendChild(n);
     var h=document.createElement("h4");h.textContent=s.title;d.appendChild(h);
     var p=document.createElement("p");p.textContent=s.desc;d.appendChild(p);
+    if(i<steps.length-1){var arrow=document.createElement("div");arrow.className="step-arrow";arrow.innerHTML="&#8594;";d.appendChild(arrow);}
     stepsEl.appendChild(d);
-  });
-
-  // PROMPT SECTIONS
-  var prompts=[
-    {name:"Context",desc:"CMO/exec audience"},
-    {name:"Objective",desc:"What changed, why"},
-    {name:"Tone & Style",desc:"Crisp, analytical"},
-    {name:"Data Priority",desc:"Source ranking"},
-    {name:"Current Week Rule",desc:"CRITICAL: no stale data"},
-    {name:"Output Structure",desc:"Required sections"},
-    {name:"What to Avoid",desc:"Vague, fabricated"},
-    {name:"Data Accuracy",desc:"ZERO TOLERANCE"},
-    {name:"Quality Bar",desc:"Pre-submission check"},
-    {name:"Validation Block",desc:"Number + source log"},
-    {name:"Source Data",desc:"All inputs prioritized"}
-  ];
-  var pEl=document.getElementById("promptSections");
-  prompts.forEach(function(p,i){
-    var d=document.createElement("div");
-    d.style.cssText="padding:.75rem;background:white;border:1px solid var(--n100);border-radius:var(--r-md);transition:all .2s;cursor:default;";
-    d.addEventListener("mouseover",function(){d.style.borderColor="rgba(153,204,238,.3)";d.style.boxShadow="var(--sh-sm)";});
-    d.addEventListener("mouseout",function(){d.style.borderColor="var(--n100)";d.style.boxShadow="none";});
-    var num=document.createElement("span");num.style.cssText="font-size:.6rem;font-weight:800;color:var(--blue-deep);letter-spacing:.05em;";
-    num.textContent=(i+1)+". ";
-    var name=document.createElement("span");name.style.cssText="font-size:.8rem;font-weight:600;color:var(--n900);";name.textContent=p.name;
-    var desc=document.createElement("div");desc.style.cssText="font-size:.7rem;color:var(--n200);margin-top:.15rem;";desc.textContent=p.desc;
-    d.appendChild(num);d.appendChild(name);d.appendChild(desc);pEl.appendChild(d);
-  });
-
-  // GRADING
-  var grades=[
-    {name:"Number Accuracy",desc:"ZERO TOLERANCE",color:"#E07070",bg:"rgba(224,112,112,.1)"},
-    {name:"Structure",desc:"All sections present",color:"var(--blue)",bg:"rgba(153,204,238,.12)"},
-    {name:"Content Depth",desc:"Numbers + context",color:"var(--blue)",bg:"rgba(153,204,238,.12)"},
-    {name:"Source Priority",desc:"Correct data usage",color:"var(--mint)",bg:"rgba(173,212,193,.15)"},
-    {name:"Tone & Style",desc:"Analytical, no hype",color:"var(--purple)",bg:"rgba(119,108,176,.12)"}
-  ];
-  var gEl=document.getElementById("gradeGrid");
-  grades.forEach(function(g){
-    var d=document.createElement("div");d.className="grade-item";
-    var icon=document.createElement("div");icon.className="grade-icon";icon.style.background=g.bg;icon.style.color=g.color;
-    var svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
-    svg.setAttribute("width","20");svg.setAttribute("height","20");svg.setAttribute("viewBox","0 0 24 24");svg.setAttribute("fill","none");svg.setAttribute("stroke","currentColor");svg.setAttribute("stroke-width","2.5");svg.setAttribute("stroke-linecap","round");
-    var pl=document.createElementNS("http://www.w3.org/2000/svg","polyline");pl.setAttribute("points","20 6 9 17 4 12");svg.appendChild(pl);icon.appendChild(svg);d.appendChild(icon);
-    var h=document.createElement("h4");h.textContent=g.name;d.appendChild(h);
-    var p=document.createElement("p");p.textContent=g.desc;d.appendChild(p);
-    gEl.appendChild(d);
   });
 
   // REPORT SECTIONS
@@ -581,7 +597,7 @@ img{max-width:100%;height:auto;display:block;}
     {name:"Risks & Watchouts",desc:"3-4 True Risks (named, quantified, timed) + 2-3 Watch Items",color:"#E07070"},
     {name:"Calendar",desc:"4-6 executive-relevant milestones with dates and registration counts",color:"var(--purple)"},
     {name:"Regional Highlights",desc:"NAM + EMEA/APAC/Japan with specific metrics per region",color:"var(--blue-deep)"},
-    {name:"Launch & Readiness",desc:"Optional: active launches, content releases, tool updates",color:"var(--orange)"}
+    {name:"Validation Block",desc:"Every cited number mapped to its exact source card or dataset",color:"var(--orange)"}
   ];
   var rsEl=document.getElementById("reportSections");
   rSecs.forEach(function(s){
@@ -593,8 +609,8 @@ img{max-width:100%;height:auto;display:block;}
 
   // STATS
   var stats=[
-    {value:7,label:"Pipeline Steps"},{value:3,label:"Data Sources"},{value:5,label:"Refinement Rounds"},{value:5,label:"Grading Criteria"},
-    {value:38,label:"Dashboard Cards"},{value:11,label:"Prompt Sections"},{value:2,label:"Deliverables"},{value:4,label:"Weekly Archives"}
+    {value:4,label:"Pipeline Steps"},{value:3,label:"Data Sources"},{value:10,label:"Max Refinement Rounds"},{value:5,label:"Grading Criteria"},
+    {value:41,label:"Dashboard Cards"},{value:11,label:"Prompt Sections"},{value:4,label:"Code Engine Packages"},{value:0,label:"External Dependencies"}
   ];
   var sEl=document.getElementById("statsGrid");
   stats.forEach(function(s){
